@@ -3,8 +3,6 @@ from sqlalchemy import Integer, String, Text, DateTime, ForeignKey, Float
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 from db import Base
 
-
-
 class Product(Base):
     __tablename__ = "products"
 
@@ -12,8 +10,52 @@ class Product(Base):
     name: Mapped[str] = mapped_column(String(20), nullable=False)
     price: Mapped[float] = mapped_column(Float, nullable=True, default=None)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=True)
-    user = relationship("Users",back_populates="products")
+    
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), nullable=True)
+    user = relationship("Users", back_populates="user_products")
+
+    product_cart = relationship("CartItem", back_populates="product")
 
     def __repr__(self):
         return f"{self.name}---{self.price}"
+
+
+class Cart(Base):
+    __tablename__ = "cart"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, unique=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), nullable=True)
+    user = relationship("Users", back_populates="user_cart", uselist=False)
+
+    cart_item = relationship("CartItem", back_populates="cart")
+
+    def __repr__(self):
+        return f"{self.user_id}-{self.id}"
+
+
+class CartItem(Base):
+    __tablename__ = "cart_item"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, unique=True)
+    cart_id: Mapped[int] = mapped_column(ForeignKey("cart.id"), nullable=True)
+    product_id: Mapped[int] = mapped_column(ForeignKey("products.id"), nullable=False)
+    quantity: Mapped[int] = mapped_column(Integer, default=1, nullable=True)
+
+    cart = relationship("Cart", back_populates="cart_item")
+    product = relationship("Product", back_populates="product_cart")
+    order_cart = relationship("Order", back_populates="cart_item")
+
+    def __repr__(self):
+        return f"{self.cart_id} -- {self.product_id}" 
+
+
+class Order(Base):
+    __tablename__ = "orders"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, unique=True)
+    cart_item_id: Mapped[int] = mapped_column(ForeignKey("cart_item.id", ondelete="CASCADE"), nullable=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), nullable=True)
+
+    cart_item = relationship("CartItem", back_populates="order_cart")
+    user = relationship("Users", back_populates="user_order")
+

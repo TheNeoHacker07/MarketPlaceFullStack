@@ -8,8 +8,9 @@ class Users(Base):
     email: Mapped[str] = mapped_column(String, nullable=False, unique=True)
     password_hash: Mapped[str] = mapped_column()
     is_active: Mapped[bool] = mapped_column(Boolean, default=False)
-    products = relationship("Products", back_populates="user")
-    
+    user_products = relationship("Product", back_populates="user")
+    user_cart = relationship("Cart", back_populates="user")
+    user_order = relationship("Order", back_populates="user")
 
     def __str__(self):
         return self.email

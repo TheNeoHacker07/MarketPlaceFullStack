@@ -12,6 +12,8 @@ app.include_router(auth_router)
 
 class AuthSettings(BaseModel):
     authjwt_secret_key: str = "e9a49cf42a48c2c482de15e75f4c6e28e7b8c89944d7e3fcd982dfc9938b0b8c"
+    authjwt_access_token_expires: int = 3600       # срок действия access token в секундах (1 час)
+    authjwt_refresh_token_expires: int = 86400
 
 
 @AuthJWT.load_config

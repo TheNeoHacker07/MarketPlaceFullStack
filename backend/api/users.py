@@ -7,6 +7,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from db import get_async_db
 from models.users import Users
+from models.products import Cart
 from schemas.users.login import UserLogin
 
 auth_router = APIRouter(prefix="/user", tags=["user"])
@@ -67,4 +68,12 @@ async def register_user(user_data: UserLogin, db: AsyncSession=Depends(get_async
     await db.commit()
     await db.refresh(new_user)
     
+    cart = Cart(user_id=new_user.id)
+    db.add(cart)
+    await db.commit()
+    await db.refresh(cart)
+
     return JSONResponse(status_code=status.HTTP_201_CREATED, content={"message": "new_user was created"})
+
+
+
