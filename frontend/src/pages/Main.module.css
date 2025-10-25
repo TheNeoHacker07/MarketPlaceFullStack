@@ -1,0 +1,77 @@
+/* Main.module.css */
+
+.productContent {
+  width: 90%;
+  max-width: 1200px;
+  background: linear-gradient(90deg, #FC466B 0%, #3F5EFB 100%);
+  margin: 100px auto 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  padding: 30px 0;
+  border-radius: 20px;
+}
+
+.product {
+  flex: 0 0 300px;
+  border: 1px solid black;
+  height: 450px;
+  display: flex;
+  flex-direction: column;
+  gap: 100px;
+  background-color: #f5f5f5;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 15px;
+  position: relative;
+  padding: 20px;
+}
+
+.productDataContent{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.productDataContent p {
+    margin: 0;
+}
+
+.product:hover {
+  transform: scale(1.08);
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.35);
+  cursor: pointer;
+}
+
+.product::after {
+  content: "";
+  position: absolute;
+  width: 0%;
+  left: 5px;
+  bottom: 5px;
+  height: 3px;
+  background: linear-gradient(90deg, #FC466B 0%, #3F5EFB 100%);
+  transition: width 0.3s ease;
+  border-radius: 3px;
+}
+
+.product:hover::after {
+  width: 97%;
+}
+
+.button {
+  width: 120px;
+  height: 40px;
+  background: #3F5EFB;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.button:hover {
+  background: #FC466B;
+  transform: scale(1.05);
+}
